@@ -45,9 +45,17 @@ function extractProject() {
 
 function runNpm(args, label) {
   console.log(`\n=== ${label} ===`);
+
+  // Workers Builds injects the connected Worker's name/tag into its environment.
+  // This deploy kit publishes multiple differently named Workers, so child
+  // Wrangler processes must use the names declared in each Worker config.
+  const childEnv = { ...process.env };
+  delete childEnv.WRANGLER_CI_OVERRIDE_NAME;
+  delete childEnv.WRANGLER_CI_MATCH_TAG;
+
   const result = spawnSync(npmCommand, args, {
     cwd: projectDir,
-    env: process.env,
+    env: childEnv,
     stdio: 'inherit',
     shell: false
   });
@@ -80,7 +88,7 @@ function deploy() {
   }
   const tasksConfigPath = path.join(projectDir, 'tasks-worker/wrangler.jsonc');
   let tasksConfig = readFileSync(tasksConfigPath, 'utf8');
-  const originPattern = /("APP_ORIGIN"\s*:\s*")[^"]+("\s*)/;
+  const originPattern = /(\"APP_ORIGIN\"\s*:\s*\")[^\"]+(\"\s*)/;
   if (!originPattern.test(tasksConfig)) throw new Error('tasks-worker/wrangler.jsonc is missing vars.APP_ORIGIN.');
   tasksConfig = tasksConfig.replace(originPattern, `$1${appOrigin}$2`);
   writeFileSync(tasksConfigPath, tasksConfig);
