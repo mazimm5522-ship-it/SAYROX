@@ -1,0 +1,36 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sayrox",
+  "main": "./SAYROX-19.11.13/site/_worker.js",
+  "compatibility_date": "2026-11-06",
+  "workers_dev": true,
+  "keep_vars": true,
+  "assets": {
+    "directory": "./SAYROX-19.11.13/site",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "AUTH_ACCOUNTS", "class_name": "AccountObject", "script_name": "sayrox-auth-storage" },
+      { "name": "AUTH_RATE_LIMITER", "class_name": "AuthRateLimiter", "script_name": "sayrox-auth-storage" },
+      { "name": "BILLING_ACCOUNT", "class_name": "BillingAccountObject", "script_name": "sayrox-billing-storage" },
+      { "name": "USAGE_ACCOUNT", "class_name": "UsageAccountObject", "script_name": "sayrox-usage-storage" },
+      { "name": "TASKS_ACCOUNT", "class_name": "TaskAccountObject", "script_name": "sayrox-tasks-storage" }
+    ]
+  },
+  "vars": {
+    "AI_PROVIDER": "gapgpt",
+    "GAPGPT_BASE_URL": "https://api.gapgpt.app/v1",
+    "PAYMENTS_ENABLED": "false",
+    "SUBSCRIPTION_ACTIVATION_READY": "false",
+    "ZARINPAL_MODE": "sandbox"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1, "invocation_logs": true },
+    "traces": { "enabled": false, "head_sampling_rate": 0.1 }
+  }
+}
