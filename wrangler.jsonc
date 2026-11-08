@@ -1,0 +1,68 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sayrox",
+  "main": "./site/_worker.js",
+  "compatibility_date": "2026-11-07",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./site",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "browser": {
+    "binding": "BROWSER"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "AUTH_ACCOUNTS",
+        "class_name": "AccountObject",
+        "script_name": "sayrox-auth-storage"
+      },
+      {
+        "name": "AUTH_RATE_LIMITER",
+        "class_name": "AuthRateLimiter",
+        "script_name": "sayrox-auth-storage"
+      },
+      {
+        "name": "BILLING_ACCOUNT",
+        "class_name": "BillingAccountObject",
+        "script_name": "sayrox-billing-storage"
+      },
+      {
+        "name": "USAGE_ACCOUNT",
+        "class_name": "UsageAccountObject",
+        "script_name": "sayrox-usage-storage"
+      },
+      {
+        "name": "TASKS_ACCOUNT",
+        "class_name": "TaskAccountObject",
+        "script_name": "sayrox-tasks-storage"
+      }
+    ]
+  },
+  "vars": {
+    "AI_PROVIDER": "gapgpt",
+    "GAPGPT_BASE_URL": "https://api.gapgpt.app/v1",
+    "AVALAI_BASE_URL": "https://api.avalai.ir/v1",
+    "HOOSHGAR_BASE_URL": "https://api.hooshgar.ir/v1",
+    "PAYMENTS_ENABLED": "false",
+    "SUBSCRIPTION_ACTIVATION_READY": "false",
+    "ZARINPAL_MODE": "sandbox"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "head_sampling_rate": 0.1
+    }
+  },
+  "keep_vars": true
+}
